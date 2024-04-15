@@ -21,7 +21,7 @@ function setItem(itm) {
 }
 function addItem (price) {
     transaction.items.push({
-        id: price.id,
+        id: item.value.id,
         product_name: item.value.product_name,
         price: parseInt(price.price)
     })

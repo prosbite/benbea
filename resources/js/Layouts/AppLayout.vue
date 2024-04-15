@@ -18,13 +18,6 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                 <div class="flex items-center gap-2">
                     <span class="flex-1">Welcome, {{ $page.props.user.name }}</span>
                     <Link :href="route('logout')" method="post" as="button" class="bg-white text-gray-700 border font-bold px-4 py-1 rounded-lg">Logout</Link>
-                    <!-- <form action="/logout" method="POST">
-                        {{ csrf_field() }}
-                        <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded-lg">Logout</button>
-                    </form> -->
-                    <!-- <DropdownLink :href="route('logout')" method="post" as="button">
-                        Log Out
-                    </DropdownLink> -->
                 </div>
             </div>
         </div>

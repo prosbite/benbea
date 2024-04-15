@@ -21,13 +21,14 @@ import NavLink from '@/Components/NavLink.vue';
                         <th class="p-2">Items</th>
                     </thead>
                     <tbody>
-                        <tr class="border" v-for="s,i in sales" :key="i">
+                        <tr class="border" v-for="s,i in today_sales" :key="i">
                             <td class="p-2">{{ i + 1 }}</td>
-                            <td class="p-2">{{ formatAmount(s.amount_received) }}</td>
-                            <td class="p-2">{{ formatAmount(s.discount) }}</td>
+                            <td class="p-2">{{ s.amount_received }}</td>
+                            <td class="p-2">{{ s.discount }}</td>
                             <td class="p-2">
                                 <div class="flex gap-1">
-                                    <span v-for="it,k in getItems(s.items)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white">{{it.count + " " + it.name }}</span>
+                                    <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white">{{it.count + " " + it.product_name }}</span>
+                                    <!-- <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white flex items-center gap-1">{{it.count + " "}}<img :src="it.icon" class="h-4 w-4"  alt=""></span> -->
                                 </div>
                             </td>
                         </tr>
@@ -41,6 +42,7 @@ import NavLink from '@/Components/NavLink.vue';
 export default {
     props: {
         user: Object, // Define user prop as an object
+        today_sales: []
     },
     data () {
         return {
@@ -93,7 +95,7 @@ export default {
     methods: {
         getItems(arr) {
             return arr.reduce((acc, obj) => {
-                const existing = acc.find(item => item.name === obj.name);
+                const existing = acc.find(item => item.id === obj.id);
                 if (existing) {
                 existing.count++;
                 } else {
@@ -105,6 +107,9 @@ export default {
         formatAmount(number) {
             return number.toFixed(2);
         }
+    },
+    mounted () {
+        // console.log(this.today_sales)
     }
 }
 </script>

@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Models\Transaction;
 use Inertia\Inertia;
 
 /*
@@ -29,7 +30,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('MyDashboard',[
-        "user" => Auth::user()
+        "user" => Auth::user(),
+        "today_sales" => (new Transaction())->todaySales(Auth::user()->id)
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
