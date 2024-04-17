@@ -6,11 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionsController extends Controller
 {
     public function index () {
         return (new Transaction())->todaySales();
+    }
+
+    public function create () {
+        return Inertia::render('TransactionCreate',[
+            "user" => Auth::user(),
+            "products" => \App\models\Product::with('prices')->get()
+        ]);
     }
 
     public function store (Request $request) {

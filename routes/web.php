@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardControllerAdmin;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Models\Transaction;
 use Inertia\Inertia;
+use App\Http\Middleware\AdminMiddleware;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,21 +32,15 @@ Route::get('/', function () {
     // ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('MyDashboard',[
-        "user" => Auth::user(),
-        "today_sales" => (new Transaction())->todaySales(Auth::user()->id)
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', AdminMiddleware::class]], function () {
+    // Routes within the admin section
+    Route::get('dashboard', [DashboardControllerAdmin::class, 'index'])->name('admin.dashboard');
+    // ... other admin routes
+});
 
-Route::get('/transaction/create', function () {
-    return Inertia::render('TransactionCreate',[
-        "user" => Auth::user(),
-        "products" => \App\models\Product::with('prices')->get()
-    ]);
-})->middleware(['auth', 'verified'])->name('transaction.create');
-
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/transaction/create', [TransactionsController::class, 'create'])->name('transaction.create');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

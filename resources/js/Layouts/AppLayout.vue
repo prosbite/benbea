@@ -16,6 +16,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
                     <span class="text-2xl text-pink-500">Bea</span>
                 </NavLink>
                 <div class="flex items-center gap-2">
+                    <NavLink v-if="$page.props.user.role === 'admin'" :href="route('admin.dashboard')" class="fa fa-key text-yellow-400 hover:text-yellow-500 active:text-yellow-600 cursor-pointer"></NavLink>
                     <span class="flex-1">Welcome, {{ $page.props.user.name }}</span>
                     <Link :href="route('logout')" method="post" as="button" class="bg-white text-gray-700 border font-bold px-4 py-1 rounded-lg">Logout</Link>
                 </div>
