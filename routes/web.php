@@ -32,20 +32,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', AdminMiddleware::class]], function () {
-    // Routes within the admin section
-    Route::get('dashboard', [DashboardControllerAdmin::class, 'index'])->name('admin.dashboard');
-    // ... other admin routes
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/transaction/create', [TransactionsController::class, 'create'])->name('transaction.create');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Route::group(['prefix' => 'admin', 'middleware' => ['auth', AdminMiddleware::class]], function () {
+//     // Routes within the admin section
+//     Route::get('dashboard', [DashboardControllerAdmin::class, 'index'])->name('admin.dashboard');
+//     // ... other admin routes
+// });
 
-    Route::post('/transaction/store', [TransactionsController::class, 'store'])->name('transaction.store');
-});
+// Route::middleware('auth', 'verified')->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+//     Route::get('/transaction/create', [TransactionsController::class, 'create'])->name('transaction.create');
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+//     Route::post('/transaction/store', [TransactionsController::class, 'store'])->name('transaction.store');
+// });
 
 require __DIR__.'/auth.php';
