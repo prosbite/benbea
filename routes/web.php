@@ -32,7 +32,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', function () {
+    // return redirect("/dashboard");
+    return Inertia::render('MyDashboard');
+});
+
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Route::group(['prefix' => 'admin', 'middleware' => ['auth', AdminMiddleware::class]], function () {
 //     // Routes within the admin section
