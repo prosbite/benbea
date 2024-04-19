@@ -26,7 +26,7 @@ import NavLink from '@/Components/NavLink.vue';
                     <tbody>
                         <tr class="border" v-for="s,i in today_sales" :key="i">
                             <td class="p-2">{{ i + 1 }}.</td>
-                            <td class="p-2">{{ formatAmount(parseInt(s.amount_received)) }}</td>
+                            <td class="p-2">{{ formatAmount(parseInt(s.total_amount)) }}</td>
                             <td class="p-2">{{ s.discount }}</td>
                             <td class="p-2">
                                 <div class="flex gap-1">
