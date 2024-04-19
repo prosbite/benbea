@@ -17,7 +17,7 @@ class TransactionsController extends Controller
     public function create () {
         return Inertia::render('TransactionCreate',[
             "user" => Auth::user(),
-            "products" => \App\models\Product::with('prices')->get()
+            "products" => \App\Models\Product::with('prices')->get()
         ]);
     }
 
