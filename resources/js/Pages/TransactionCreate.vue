@@ -58,6 +58,7 @@ onMounted(() => {
 })
 const checkOut = () => {
     transaction.discount = !transaction.discount ? 0 : transaction.discount
+	transaction.total_amount = totalAmount.value
     transaction.post(route('transaction.store'), {
         onFinish: () => {
             alert("Saved successfully!")
