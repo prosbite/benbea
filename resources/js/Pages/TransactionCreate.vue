@@ -13,6 +13,7 @@ const transaction = useForm({
     amount_received: null,
     discount: null,
     change: 0,
+	note: "",
     user_id: null,
 })
 const items = ref([])
@@ -59,6 +60,7 @@ onMounted(() => {
 const checkOut = () => {
     transaction.discount = !transaction.discount ? 0 : transaction.discount
 	transaction.total_amount = totalAmount.value
+	transaction.change = changeAmount.value
     transaction.post(route('transaction.store'), {
         onFinish: () => {
             alert("Saved successfully!")
@@ -85,17 +87,7 @@ const checkOut = () => {
                     </div>
                 </div>
                 <div class="flex bg-gray-200">
-                    <span @click="addItem(price)" v-for="price,i in item.prices" :key="price.id" class="w-20 h-20 cursor-pointer bg-gray-200 hover:bg-gray-300 active:bg-gray-400 flex justify-center items-center font-bold text-xl border-r border-gray-300">{{ parseInt(price.price) }}</span>
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-4 w-full justify-between p-4 max-w-[960px]">
-                <div class="flex flex-col gap-1 flex-1">
-                    <label for="" class="text-sm font-bold">Amount Paid</label>
-                    <input v-model="transaction.amount_received" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00">
-                </div>
-                <div class="flex flex-col gap-1 flex-1">
-                    <label for="" class="text-sm font-bold">Discount</label>
-                    <input v-model="transaction.discount" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00">
+                    <span @click="addItem(price)" v-for="price in item.prices" :key="price.id" class="w-20 h-16 cursor-pointer bg-gray-200 hover:bg-gray-300 active:bg-gray-400 flex justify-center items-center font-bold text-xl border-r border-gray-300">{{ parseInt(price.price) }}</span>
                 </div>
             </div>
             <div class="flex flex-col w-full max-w-[960px] p-4">
@@ -134,9 +126,24 @@ const checkOut = () => {
                         <span class="flex-1"></span>
                     </div>
                 </div>
+				<div class="flex flex-col sm:flex-row gap-4 w-full pt-8 justify-between p-4 max-w-[960px]">
+					<div class="flex flex-col gap-1 flex-1">
+						<label for="" class="text-sm font-bold">Amount Paid</label>
+						<input v-model="transaction.amount_received" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00">
+					</div>
+					<div class="flex flex-col gap-1 flex-1">
+						<label for="" class="text-sm font-bold">Discount</label>
+						<input v-model="transaction.discount" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00">
+					</div>
+				</div>
+				<div class="flex flex-col gap-1 flex-1 px-4">
+					<label for="" class="text-sm font-bold">Note</label>
+					<textarea v-model="transaction.note" class="px-2 py-1 rounded-md border border-gray-300 w-fill"></textarea>
+					<!-- <input v-model="transaction.discount" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00"> -->
+				</div>
                 <div class="flex justify-center sm:justify-end pb-48 pt-10 gap-4">
                     <NavLink :href="route('dashboard')" class="text-2xl px-8 text-white bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-600 cursor-pointer rounded-lg"><i class="fa fa-ban mr-2"></i>Cancel</NavLink>
-                    <span @click="checkOut" v-if="transaction.amount_received > 1&&transaction.items.length > 1" class="py-2 px-4 text-white bg-green-600 hover:bg-green-700 active:bg-green-600 cursor-pointer rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
+                    <span @click="checkOut" v-if="transaction.amount_received > 1&&transaction.items.length > 0" class="py-2 px-4 text-white bg-green-600 hover:bg-green-700 active:bg-green-600 cursor-pointer rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
                     <span v-else class="py-2 px-4 text-white bg-gray-300 rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
                 </div>
             </div>

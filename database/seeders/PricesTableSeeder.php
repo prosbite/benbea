@@ -28,6 +28,7 @@ class PricesTableSeeder extends Seeder
             ['price' => 380.00],
             ['price' => 450.00],
             ['price' => 490.00],
+			['price' => 390.00],
             // Add more prices as needed
         ];
 

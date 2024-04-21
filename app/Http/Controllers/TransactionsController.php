@@ -27,6 +27,7 @@ class TransactionsController extends Controller
         $transaction->amount_received = $request->amount_received;
         $transaction->discount = $request->discount;
         $transaction->change = $request->change;
+		$transaction->note = $request->note;
         $transaction->user_id = $request->user_id;
         $transaction->save();
         foreach ($request->items as $value) {

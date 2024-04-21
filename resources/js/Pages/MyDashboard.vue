@@ -19,15 +19,15 @@ import NavLink from '@/Components/NavLink.vue';
                  <table v-else class="w-full">
                     <thead class="bg-slate-200 text-left">
                         <th class="p-2">#</th>
-                        <th class="p-2">Amount Received</th>
+                        <th class="p-2">Amount</th>
                         <th class="p-2">Discount</th>
                         <th class="p-2">Items</th>
                     </thead>
                     <tbody>
                         <tr class="border" v-for="s,i in today_sales" :key="i">
                             <td class="p-2">{{ i + 1 }}.</td>
-                            <td class="p-2">{{ formatAmount(parseInt(s.total_amount)) }}</td>
-                            <td class="p-2">{{ s.discount }}</td>
+                            <td class="p-2">{{ formatAmount(parseInt(s.total_amount) - parseInt(s.discount)) }}</td>
+                            <td class="p-2">{{ parseInt(s.discount) }}</td>
                             <td class="p-2">
                                 <div class="flex gap-1">
                                     <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white">{{it.count + " " + it.product_name }}</span>
@@ -35,9 +35,19 @@ import NavLink from '@/Components/NavLink.vue';
                                 </div>
                             </td>
                         </tr>
+						<tr v-if="showTotal" class="border bg-slate-200">
+							<td></td>
+							<td class="font-bold">{{ formatAmount(totalAmount) }}</td>
+							<td></td>
+							<td>TOTAL</td>
+						</tr>
                         <tr></tr>
                     </tbody>
                 </table>
+				<div v-if="today_sales.length > 1" class="flex mt-4 justify-start">
+					<button @click="showTotal = true" v-if="!showTotal" :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"> Show Total </button>
+					<button @click="showTotal = false" v-else :href="route('transaction.create')" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md cursor-pointer hover:bg-yellow-600"> Hide Total </button>
+				</div>
             </div>
         </div>
     </AppLayout>
@@ -48,54 +58,11 @@ export default {
         user: Object, // Define user prop as an object
         today_sales: Array
     },
-    data () {
-        return {
-            sales: [
-                {
-                    id: 1,
-                    amount_received: 640,
-                    items: [
-                        {
-                            name: "Trouser",
-                            amount: 200
-                        },
-                        {
-                            name: "Dress",
-                            amount: 290
-                        },
-                        {
-                            name: "Tops",
-                            amount: 150
-                        }
-                    ],
-                    discount: 0
-                },
-                {
-                    id: 2,
-                    amount_received: 1200,
-                    items: [
-                        {
-                            name: "Trouser",
-                            amount: 250
-                        },
-                        {
-                            name: "Trouser",
-                            amount: 290
-                        },
-                        {
-                            name: "Tops",
-                            amount: 100
-                        },
-                        {
-                            name: "Dress",
-                            amount: 290
-                        }
-                    ],
-                    discount: 0
-                }
-            ]
-        }
-    },
+	data (){
+		return {
+			showTotal: false
+		}
+	},
     methods: {
         getItems(arr) {
             return arr.reduce((acc, obj) => {
@@ -117,6 +84,15 @@ export default {
             return formatter.format(number)
         }
     },
+	computed: {
+		totalAmount () {
+			let total = 0
+			this.today_sales.forEach((sale) => {
+				total += parseInt(sale.total_amount - sale.discount)
+			})
+			return total
+		}
+	},
     mounted () {
         // console.log(this.today_sales)
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('amount_received', 10, 2); // amount received from the customer
             $table->decimal('discount', 10, 2)->default(0); // discount applied to the transaction
             $table->decimal('change', 10, 2); // change returned to the customer
+			$table->text('note')->nullable();
             $table->bigInteger('user_id');
             $table->timestamps();
         });
