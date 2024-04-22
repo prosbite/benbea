@@ -1,7 +1,11 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import NavLink from '@/Components/NavLink.vue';
+import Modal from '@/Components/Modal.vue';
+import TransactionDetails from '@/Components/app/TransactionDetails.vue';
+
 </script>
 
 <template>
@@ -24,7 +28,7 @@ import NavLink from '@/Components/NavLink.vue';
                         <th class="p-2">Items</th>
                     </thead>
                     <tbody>
-                        <tr class="border" v-for="s,i in today_sales" :key="i">
+                        <tr @click="showModal(s)" class="border hover:bg-gray-100 cursor-pointer active:bg-gray-200" v-for="s,i in today_sales" :key="i">
                             <td class="p-2">{{ i + 1 }}.</td>
                             <td class="p-2">{{ formatAmount(parseInt(s.total_amount) - parseInt(s.discount)) }}</td>
                             <td class="p-2">{{ parseInt(s.discount) }}</td>
@@ -50,6 +54,75 @@ import NavLink from '@/Components/NavLink.vue';
 				</div>
             </div>
         </div>
+        <Modal :show="modalShow" :closeable="true">
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center h-10 bg-gray-100 px-4">
+                    <h1 class="font-bold text-slate-700">Transaction Details</h1>
+                    <i @click="modalShow=false" class="fa fa-close text-2xl cursor-pointer text-slate-600 hover:text-red-500"></i>
+                </div>
+                <TransactionDetails :transaction="transaction" />
+                <!-- <div class="flex flex-col p-4 gap-2">
+                    <h2 class="text-xs font-bold text-slate-500">
+                        ITEMS LIST
+                    </h2>
+                    <div class="flex flex-col mb-2 gap-1">
+                        <div class="flex items-center pl-4">
+                            <span class="w-1/3">Trouser</span>
+                            <span class="w-2/3">250</span>
+                        </div>
+                        <div class="flex items-center pl-4">
+                            <span class="w-1/3">Dress</span>
+                            <span class="w-2/3">390</span>
+                        </div>
+                        <div class="flex items-center pl-4 border-b border-gray-200">
+                            <span class="w-1/3">Blazer</span>
+                            <span class="w-2/3">450</span>
+                        </div>
+                        <div class="flex flex-col gap-1 bg-gray-100 py-2 border-t">
+                            <div class="flex items-center pl-4 font-bold">
+                                <span class="w-1/3">3 Items</span>
+                                <span class="w-2/3">1,020</span>
+                            </div>
+                            <div class="flex items-center pl-4 text-red-600 border-b border-gray-200">
+                                <span class="w-1/3 pl-4">Discount</span>
+                                <span class="w-1/3 font-bold"></span>
+                                <span class="w-1/3">20</span>
+                            </div>
+                            <div class="flex items-center pl-4">
+                                <span class="w-1/3 font-bold">Total</span>
+                                <span class="w-1/3 font-bold">1,000</span>
+                                <span class="w-1/3"></span>
+                            </div>
+                            <div class="flex items-center pl-4 border-b border-gray-200 text-red-600">
+                                <span class="w-1/3 pl-4">Amount Received</span>
+                                <span class="w-1/3 text-gray-700"></span>
+                                <span class="w-1/3">1,200</span>
+                            </div>
+                            <div class="flex items-center pl-4 font-bold text-green-600">
+                                <span class="w-1/3">Change</span>
+                                <span class="w-2/3">200</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col gap-1 flex-1">
+                                <label for="" class="text-xs text-slate-800">Date of Purchase</label>
+                                <span type="text" class="border-0 h-10 bg-gray-100 rounded-md w-fill">21 Apr 2024</span>
+                            </div>
+                            <div class="flex flex-col gap-1 flex-1">
+                                <label for="" class="text-xs text-slate-800">Time of Purchase</label>
+                                <span type="text" class="border-0 h-10 bg-gray-100 rounded-md w-fill">10:51 AM</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1 flex-1 mb-12">
+                            <label for="" class="text-xs text-slate-800">Remarks</label>
+                            <span type="text" class="border-0 min-h-10 bg-gray-100 rounded-md w-fill">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum fuga quisquam quo molestias, tenetur accusamus corrupti iste obcaecati deleniti pariatur laboriosam possimus officia voluptate! Excepturi libero necessitatibus nisi eaque consequuntur!</span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </Modal>
     </AppLayout>
 </template>
 <script>
@@ -60,10 +133,16 @@ export default {
     },
 	data (){
 		return {
-			showTotal: false
+			showTotal: false,
+            transaction: {},
+            modalShow: false,
 		}
 	},
     methods: {
+        showModal (trans) {
+            this.transaction = trans
+            this.modalShow = true
+        },
         getItems(arr) {
             return arr.reduce((acc, obj) => {
                 const existing = acc.find(item => item.id === obj.id);

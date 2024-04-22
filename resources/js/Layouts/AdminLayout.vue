@@ -7,7 +7,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 </script>
 
 <template>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center relative">
         <div class="h-16 w-full bg-red-500 flex justify-center">
             <div class="flex bg-white w-full h-full max-w-[1300px] justify-between">
                 <div class="logo flex items-center">
