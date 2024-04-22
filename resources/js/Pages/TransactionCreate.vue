@@ -59,7 +59,9 @@ onMounted(() => {
     items.value = props.products
     transaction.user_id = props.user.id
 })
+const saving = ref(false)
 const checkOut = () => {
+    saving.value = true
     transaction.discount = !transaction.discount ? 0 : transaction.discount
 	transaction.total_amount = totalAmount.value
 	transaction.change = changeAmount.value
@@ -76,6 +78,7 @@ const checkOut = () => {
                 note: "",
                 user_id: null,
             })
+            saving.value = false
         }
     });
 }
@@ -154,9 +157,14 @@ const checkOut = () => {
 					<!-- <input v-model="transaction.discount" type="number" class="px-2 py-1 rounded-md border border-gray-300 w-fill" placeholder="0.00"> -->
 				</div>
                 <div class="flex justify-center sm:justify-end pb-48 pt-10 gap-4">
-                    <NavLink :href="route('dashboard')" class="text-2xl px-8 text-white bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-600 cursor-pointer rounded-lg"><i class="fa fa-ban mr-2"></i>Cancel</NavLink>
-                    <span @click="checkOut" v-if="transaction.amount_received > 1&&transaction.items.length > 0" class="py-2 px-4 text-white bg-green-600 hover:bg-green-700 active:bg-green-600 cursor-pointer rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
-                    <span v-else class="py-2 px-4 text-white bg-gray-300 rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
+                    <NavLink :href="route('dashboard')" class="text-2xl px-8 text-white bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-600 cursor-pointer rounded-lg pt-2 pb-1"><i class="fa fa-ban mr-2"></i>Cancel</NavLink>
+                    <span v-if="saving" class="py-2 px-4 text-white bg-gray-300 rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Saving...</span>
+                    <div v-else class="flex items-center">
+                        <span @click="checkOut" v-if="transaction.amount_received > 1&&transaction.items.length > 0" class="py-2 px-4 text-white bg-green-600 hover:bg-green-700 active:bg-green-600 cursor-pointer rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
+                        <span v-else class="py-2 px-4 text-white bg-gray-300 rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
+                    </div>
+                    <!-- <span @click="checkOut" v-if="transaction.amount_received > 1&&transaction.items.length > 0" class="py-2 px-4 text-white bg-green-600 hover:bg-green-700 active:bg-green-600 cursor-pointer rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span>
+                    <span v-else class="py-2 px-4 text-white bg-gray-300 rounded-lg"><i class="fa fa-cart-shopping mr-2"></i>Check Out</span> -->
                 </div>
             </div>
         </div>
