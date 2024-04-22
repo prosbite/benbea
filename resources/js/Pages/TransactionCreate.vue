@@ -3,10 +3,12 @@ import { computed, onMounted, ref } from 'vue'
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import NavLink from '@/Components/NavLink.vue';
+import { useUtilities } from '@/Composables/Utilities.js'
 
+const utils = useUtilities()
 const props = defineProps(["user", "products"])
 
-const transaction = useForm({
+let transaction = useForm({
     id: null,
     items: [],
     total_amount: 0,
@@ -64,6 +66,16 @@ const checkOut = () => {
     transaction.post(route('transaction.store'), {
         onFinish: () => {
             alert("Saved successfully!")
+            transaction = useForm({
+                id: null,
+                items: [],
+                total_amount: 0,
+                amount_received: null,
+                discount: null,
+                change: 0,
+                note: "",
+                user_id: null,
+            })
         }
     });
 }
