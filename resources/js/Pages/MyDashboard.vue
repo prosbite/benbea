@@ -1,11 +1,54 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import NavLink from '@/Components/NavLink.vue';
 import Modal from '@/Components/Modal.vue';
 import TransactionDetails from '@/Components/app/TransactionDetails.vue';
+import { useUtilities } from '@/Composables/Utilities.js'
 
+const utils = useUtilities()
+
+let starting = useForm({
+    id: null,
+    user_id: null,
+    starting_amount: null,
+    expected_amount: 0,
+    actual_amount: 0,
+    location: ""
+})
+
+const props = defineProps({
+    user: {
+        default: Object
+    },
+    today_sales: {
+        default: Array
+    },
+    today: {
+        default: Object
+    }
+})
+
+function amountForm (amount) {
+    return utils.formatAmount(amount)
+}
+
+const handleSubmit = () => {
+    starting.user_id = props.user.id
+    starting.post(route('today.store'), {
+        onFinish: () => {
+            starting = useForm({
+                id: null,
+                user_id: null,
+                starting_amount: 0,
+                expected_amount: 0,
+                actual_amount: 0,
+                location: ""
+            })
+        }
+    });
+}
 </script>
 
 <template>
@@ -17,6 +60,19 @@ import TransactionDetails from '@/Components/app/TransactionDetails.vue';
                     <span class="text-xl font-bold text-slate-600">Today's Sales</span>
                     <NavLink :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"><i class="fa fa-cart-plus mr-2"></i> New Transaction </NavLink>
                 </div>
+                <div v-if="!today" class="flex">
+                    <form @submit.prevent="handleSubmit">
+                        <div v-if="addStartingAmount" class="flex items-center gap-2">
+                            <input v-model="starting.starting_amount" type="number" class="border rounded-md h-8" placeholder="0.00" required>
+                            <button class="rounded-md bg-green-500 text-white px-4 py-1">Save</button>
+                        </div>
+                        <button @click="addStartingAmount=true" v-else :href="route('transaction.create')" class="px-3 py-1 bg-white text-green-600 text-sm rounded-md cursor-pointer border border-green-600 border-1 hover:text-emerald-700"><i class="fa fa-money-bill-wave mr-2"></i> Add Starting Amount </button>
+                    </form>
+               </div>
+               <div v-else class="flex gap-2">
+                    <span class="text-gray-400">Starting Amount:</span>
+                    <span class="font-bold text-green-500">{{ amountForm(today.starting_amount) }}</span>
+               </div>
                 <div v-if="today_sales.length === 0" class="bg-gray-200 rounded-md py-10 flex items-center justify-center">
                     <span>No sales yet.</span>
                 </div>
@@ -41,9 +97,9 @@ import TransactionDetails from '@/Components/app/TransactionDetails.vue';
                         </tr>
 						<tr v-if="showTotal" class="border bg-slate-200">
 							<td></td>
-							<td class="font-bold">{{ formatAmount(totalAmount) }}</td>
-							<td></td>
-							<td>TOTAL</td>
+							<td class="font-bold p-2">{{ formatAmount(totalAmount) }} <span class="ml-2 text-green-500">({{ formatAmount(totalAmount + today.starting_amount) }})</span></td>
+							<td class="p-2">{{ totalDiscount }}</td>
+							<td class="p-2">TOTAL</td>
 						</tr>
                         <tr></tr>
                     </tbody>
@@ -61,66 +117,6 @@ import TransactionDetails from '@/Components/app/TransactionDetails.vue';
                     <i @click="modalShow=false" class="fa fa-close text-2xl cursor-pointer text-slate-600 hover:text-red-500"></i>
                 </div>
                 <TransactionDetails :transaction="transaction" />
-                <!-- <div class="flex flex-col p-4 gap-2">
-                    <h2 class="text-xs font-bold text-slate-500">
-                        ITEMS LIST
-                    </h2>
-                    <div class="flex flex-col mb-2 gap-1">
-                        <div class="flex items-center pl-4">
-                            <span class="w-1/3">Trouser</span>
-                            <span class="w-2/3">250</span>
-                        </div>
-                        <div class="flex items-center pl-4">
-                            <span class="w-1/3">Dress</span>
-                            <span class="w-2/3">390</span>
-                        </div>
-                        <div class="flex items-center pl-4 border-b border-gray-200">
-                            <span class="w-1/3">Blazer</span>
-                            <span class="w-2/3">450</span>
-                        </div>
-                        <div class="flex flex-col gap-1 bg-gray-100 py-2 border-t">
-                            <div class="flex items-center pl-4 font-bold">
-                                <span class="w-1/3">3 Items</span>
-                                <span class="w-2/3">1,020</span>
-                            </div>
-                            <div class="flex items-center pl-4 text-red-600 border-b border-gray-200">
-                                <span class="w-1/3 pl-4">Discount</span>
-                                <span class="w-1/3 font-bold"></span>
-                                <span class="w-1/3">20</span>
-                            </div>
-                            <div class="flex items-center pl-4">
-                                <span class="w-1/3 font-bold">Total</span>
-                                <span class="w-1/3 font-bold">1,000</span>
-                                <span class="w-1/3"></span>
-                            </div>
-                            <div class="flex items-center pl-4 border-b border-gray-200 text-red-600">
-                                <span class="w-1/3 pl-4">Amount Received</span>
-                                <span class="w-1/3 text-gray-700"></span>
-                                <span class="w-1/3">1,200</span>
-                            </div>
-                            <div class="flex items-center pl-4 font-bold text-green-600">
-                                <span class="w-1/3">Change</span>
-                                <span class="w-2/3">200</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <div class="flex gap-4">
-                            <div class="flex flex-col gap-1 flex-1">
-                                <label for="" class="text-xs text-slate-800">Date of Purchase</label>
-                                <span type="text" class="border-0 h-10 bg-gray-100 rounded-md w-fill">21 Apr 2024</span>
-                            </div>
-                            <div class="flex flex-col gap-1 flex-1">
-                                <label for="" class="text-xs text-slate-800">Time of Purchase</label>
-                                <span type="text" class="border-0 h-10 bg-gray-100 rounded-md w-fill">10:51 AM</span>
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-1 flex-1 mb-12">
-                            <label for="" class="text-xs text-slate-800">Remarks</label>
-                            <span type="text" class="border-0 min-h-10 bg-gray-100 rounded-md w-fill">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum fuga quisquam quo molestias, tenetur accusamus corrupti iste obcaecati deleniti pariatur laboriosam possimus officia voluptate! Excepturi libero necessitatibus nisi eaque consequuntur!</span>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </Modal>
     </AppLayout>
@@ -129,10 +125,12 @@ import TransactionDetails from '@/Components/app/TransactionDetails.vue';
 export default {
     props: {
         user: Object, // Define user prop as an object
-        today_sales: Array
+        today_sales: Array,
+        today: Object
     },
 	data (){
 		return {
+            addStartingAmount: false,
 			showTotal: false,
             transaction: {},
             modalShow: false,
@@ -170,10 +168,17 @@ export default {
 				total += parseInt(sale.total_amount - sale.discount)
 			})
 			return total
-		}
+		},
+        totalDiscount () {
+			let total = 0
+			this.today_sales.forEach((sale) => {
+				total += parseInt(sale.discount)
+			})
+            return total
+		},
 	},
     mounted () {
-        // console.log(this.today_sales)
+        // console.log(this.today)
     }
 }
 </script>

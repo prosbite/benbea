@@ -61,26 +61,30 @@ onMounted(() => {
 })
 const saving = ref(false)
 const checkOut = () => {
-    saving.value = true
-    transaction.discount = !transaction.discount ? 0 : transaction.discount
-	transaction.total_amount = totalAmount.value
-	transaction.change = changeAmount.value
-    transaction.post(route('transaction.store'), {
-        onFinish: () => {
-            alert("Saved successfully!")
-            transaction = useForm({
-                id: null,
-                items: [],
-                total_amount: 0,
-                amount_received: null,
-                discount: null,
-                change: 0,
-                note: "",
-                user_id: null,
-            })
-            saving.value = false
-        }
-    });
+    if(changeAmount.value >= 0) {
+        saving.value = true
+        transaction.discount = !transaction.discount ? 0 : transaction.discount
+        transaction.total_amount = totalAmount.value
+        transaction.change = changeAmount.value
+        transaction.post(route('transaction.store'), {
+            onFinish: () => {
+                alert("Saved successfully!")
+                transaction = useForm({
+                    id: null,
+                    items: [],
+                    total_amount: 0,
+                    amount_received: null,
+                    discount: null,
+                    change: 0,
+                    note: "",
+                    user_id: null,
+                })
+                saving.value = false
+            }
+        });
+    } else {
+        alert("Insufficient payment amount!")
+    }
 }
 </script>
 
