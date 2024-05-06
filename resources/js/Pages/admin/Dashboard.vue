@@ -2,6 +2,12 @@
 import { Head } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import NavLink from '@/Components/NavLink.vue'
+import { ref, onMounted } from 'vue';
+
+const props = defineProps(["user"])
+// onMounted(() => {
+//     console.log(props.user)
+// })
 </script>
 
 <template>

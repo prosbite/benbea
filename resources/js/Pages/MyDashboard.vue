@@ -97,7 +97,7 @@ const handleSubmit = () => {
                         </tr>
 						<tr v-if="showTotal" class="border bg-slate-200">
 							<td></td>
-							<td class="font-bold p-2">{{ formatAmount(totalAmount) }} <span class="ml-2 text-green-500">({{ formatAmount(totalAmount + today.starting_amount) }})</span></td>
+							<td class="font-bold p-2">{{ formatAmount(totalAmount) }} <span v-if="today" class="ml-2 text-green-500">({{ formatAmount(totalAmount + today.starting_amount) }})</span></td>
 							<td class="p-2">{{ totalDiscount }}</td>
 							<td class="p-2">TOTAL</td>
 						</tr>
