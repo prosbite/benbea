@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import NavLink from '@/Components/NavLink.vue'
+import { Link } from '@inertiajs/vue3';
 import { useUtilities } from '@/Composables/Utilities.js'
 
 const utils = useUtilities()
@@ -76,6 +77,7 @@ const productTotal = computed(() => {
                     <label for="" class="text-xs text-slate-800">Remarks</label>
                     <span type="text" class="border-0 min-h-10 bg-gray-100 rounded-md w-fill">{{ transaction.note }}</span>
                 </div>
+                <Link :href="route('receipt', transaction.id)" class="border px-8 py-2 text-center rounded-md hover:bg-gray-100 active:bg-gray-200">Print Receipt</Link>
             </div>
         </div>
     </div>

@@ -39,6 +39,6 @@ class TransactionsController extends Controller
 
             DB::table('product_transaction')->insert($data);
         }
-        return to_route('dashboard');
+        return to_route('receipt', $transaction->id);
     }
 }

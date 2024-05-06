@@ -24,5 +24,14 @@ export function useUtilities() {
         return formatter.format(number)
     }
 
-    return { formatDate, formatTime, formatAmount }
+    function twoDigits(number, locale = "en-US") {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "decimal",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })
+        return formatter.format(number)
+    }
+
+    return { formatDate, formatTime, formatAmount, twoDigits }
   }
