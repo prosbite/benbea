@@ -22,11 +22,11 @@
             </div>
             <div class="flex justify-between items-center ">
                 <span class="">Amount Paid</span>
-                <span class="">{{ transaction.amount_received }}</span>
+                <span class="">{{ utils.twoDigits(transaction.amount_received) }}</span>
             </div>
             <div class="flex justify-between items-center mb-4">
                 <span class="">Change</span>
-                <span class="">{{ transaction.change }}</span>
+                <span class="">{{ utils.twoDigits(transaction.change) }}</span>
             </div>
             <span class="font-bold text-center text-xl">***</span>
             <span class="font-bold text-center text-xl">THANK YOU, COME AGAIN!</span>
