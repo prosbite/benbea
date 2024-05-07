@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center">
-        <div class="p-6 border flex flex-col w-full" style="max-width: 300px!important;">
+        <div class="p-6 border flex flex-col w-full" style="max-width: 500px!important;">
             <div class="header flex flex-col mb-2">
                 <span class="font-bold text-md text-center">BEN&BEA</span>
                 <span class="text-sm text-center">{{ utils.formatDate(new Date(props.transaction.created_at)) + " " + utils.formatTime(new Date(props.transaction.created_at)) }}</span>
