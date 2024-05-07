@@ -1,17 +1,17 @@
 <template>
-    <div class="flex justify-center">
+    <div class="flex justify-center text-xl">
         <div class="p-6 border flex flex-col w-full" style="max-width: 500px!important;">
             <div class="header flex flex-col mb-2">
-                <span class="font-bold text-md text-center">BEN&BEA</span>
+                <span class="font-bold text-3xl text-center">BEN&BEA</span>
                 <span class="text-sm text-center">{{ utils.formatDate(new Date(props.transaction.created_at)) + " " + utils.formatTime(new Date(props.transaction.created_at)) }}</span>
             </div>
-            <div class="items flex flex-col w-full border-b-2 border-black">
+            <div class="items flex flex-col w-full border-b-2 border-black text-xl">
                 <div v-for="item in transaction.products" :key="item.id" class="flex justify-between items-center ">
                     <span class="">{{ item.product_name }}</span>
                     <span class="">{{ item.pivot.price }}</span>
                 </div>
             </div>
-            <span v-if="transaction.discount > 0" class="text-bold text-right">{{ utils.twoDigits(total) }}</span>
+            <span v-if="transaction.discount > 0" class="text-bold text-right text-xl">{{ utils.twoDigits(total) }}</span>
             <div v-if="transaction.discount > 0" class="flex justify-between items-center border-b-2 border-black">
                 <span class="">DISCOUNT</span>
                 <span class="">{{ "- " + transaction.discount }}</span>
@@ -28,8 +28,8 @@
                 <span class="">Change</span>
                 <span class="">{{ transaction.change }}</span>
             </div>
-            <span class="font-bold text-center text-sm">***</span>
-            <span class="font-bold text-center text-sm">THANK YOU, COME AGAIN!</span>
+            <span class="font-bold text-center text-xl">***</span>
+            <span class="font-bold text-center text-xl">THANK YOU, COME AGAIN!</span>
         </div>
     </div>
 </template>
