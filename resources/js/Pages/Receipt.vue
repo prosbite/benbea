@@ -1,9 +1,9 @@
 <template>
-    <div class="flex justify-center text-xl">
+    <div class="flex justify-center text-2xl">
         <div class="p-6 border flex flex-col w-full" style="max-width: 500px!important;">
             <div class="header flex flex-col mb-2">
-                <span class="font-bold text-3xl text-center">BEN&BEA</span>
-                <span class="text-sm text-center">{{ utils.formatDate(new Date(props.transaction.created_at)) + " " + utils.formatTime(new Date(props.transaction.created_at)) }}</span>
+                <span class="font-bold text-4xl text-center">BEN&BEA</span>
+                <span class="text-xl text-center">{{ utils.formatDate(new Date(props.transaction.created_at)) + " " + utils.formatTime(new Date(props.transaction.created_at)) }}</span>
             </div>
             <div class="items flex flex-col w-full border-b-2 border-black text-xl">
                 <div v-for="item in transaction.products" :key="item.id" class="flex justify-between items-center ">
@@ -30,6 +30,7 @@
             </div>
             <span class="font-bold text-center text-xl">***</span>
             <span class="font-bold text-center text-xl">THANK YOU, COME AGAIN!</span>
+            <span class="text-center text-lg">Add <b>Ben N Bea</b> on facebook.</span>
         </div>
     </div>
 </template>
