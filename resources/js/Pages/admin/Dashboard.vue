@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import NavLink from '@/Components/NavLink.vue'
 import { ref, onMounted } from 'vue';
@@ -13,10 +13,11 @@ import { ref, onMounted } from 'vue';
             <div class="flex-1 bg-gray-50 flex justify-center items-start min-h-screen">
             <div class="max-w-[960px] p-4 w-full flex flex-col gap-4">
                 <div class="flex justify-between">
-                    <span class="text-xl font-bold text-slate-600">Today's Sales</span>
-                    <NavLink :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"><i class="fa fa-cart-plus mr-2"></i> New Transaction </NavLink>
+                    <span class="text-xl font-bold text-slate-600">Sales</span>
+                    <input @change="setSaleDate" v-model="salesDate" type="date" class="border rounded-md border-gray-200 px-2 py-1">
+                    <!-- <NavLink :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"><i class="fa fa-cart-plus mr-2"></i> New Transaction </NavLink> -->
                 </div>
-                <div v-if="!today" class="flex">
+                <!-- <div v-if="!today" class="flex">
                     <form @submit.prevent="handleSubmit">
                         <div v-if="addStartingAmount" class="flex items-center gap-2">
                             <input v-model="starting.starting_amount" type="number" class="border rounded-md h-8" placeholder="0.00" required>
@@ -24,11 +25,7 @@ import { ref, onMounted } from 'vue';
                         </div>
                         <button @click="addStartingAmount=true" v-else :href="route('transaction.create')" class="px-3 py-1 bg-white text-green-600 text-sm rounded-md cursor-pointer border border-green-600 border-1 hover:text-emerald-700"><i class="fa fa-money-bill-wave mr-2"></i> Add Starting Amount </button>
                     </form>
-               </div>
-               <div v-else class="flex gap-2">
-                    <span class="text-gray-400">Starting Amount:</span>
-                    <span class="font-bold text-green-500">{{ amountForm(today.starting_amount) }}</span>
-               </div>
+               </div> -->
                 <div v-if="today_sales.length === 0" class="bg-gray-200 rounded-md py-10 flex items-center justify-center">
                     <span>No sales yet.</span>
                 </div>
@@ -68,6 +65,15 @@ import { ref, onMounted } from 'vue';
         </div>
             <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere animi aliquam blanditiis eius unde quis suscipit, assumenda nam officia dolor nihil odit ea explicabo repellat voluptates esse, quo laboriosam amet? -->
         </div>
+        <Modal :show="modalShow" :closeable="true">
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center h-10 bg-gray-100 px-4">
+                    <h1 class="font-bold text-slate-700">Transaction Details</h1>
+                    <i @click="modalShow=false" class="fa fa-close text-2xl cursor-pointer text-slate-600 hover:text-red-500"></i>
+                </div>
+                <TransactionDetails :transaction="transaction" />
+            </div>
+        </Modal>
     </AdminLayout>
 </template>
 
@@ -84,9 +90,15 @@ export default {
 			showTotal: false,
             transaction: {},
             modalShow: false,
+            salesDate: null
 		}
 	},
     methods: {
+        setSaleDate () {
+            router.visit('/admin/dashboard?date=' + this.salesDate, {
+                method: 'get',
+            })
+        },
         showModal (trans) {
             this.transaction = trans
             this.modalShow = true
