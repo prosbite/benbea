@@ -14,6 +14,10 @@ class Transaction extends Model
         return self::whereDate('created_at', $today)->where('user_id', $userId)->with('products')->get();
     }
 
+    public function salesByDate ($userId, $date) {
+        return self::whereDate('created_at', $date)->where('user_id', $userId)->with('products')->get();
+    }
+
     public function products()
     {
         return $this->belongsToMany(Product::class, "product_transaction")->withPivot('price');
