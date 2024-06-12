@@ -28,7 +28,7 @@ Route::get('/', function () {
     return redirect("/dashboard");
 });
 
-
+Route::get('/receipt/{id}', [ReceiptController::class, 'show'])->name('receipt');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', AdminMiddleware::class]], function () {
@@ -41,7 +41,6 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transaction/create', [TransactionsController::class, 'create'])->name('transaction.create');
     Route::post('/today/store', [TodaysController::class, 'store'])->name('today.store');
-    Route::get('/receipt/{id}', [ReceiptController::class, 'show'])->name('receipt');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
