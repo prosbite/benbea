@@ -29,43 +29,47 @@ import { ref, onMounted } from 'vue';
                 <div v-if="today_sales.length === 0" class="bg-gray-200 rounded-md py-10 flex items-center justify-center">
                     <span>No sales yet.</span>
                 </div>
-                 <table v-else class="w-full">
-                    <thead class="bg-slate-200 text-left">
-                        <th class="p-2">#</th>
-                        <th class="p-2">Amount</th>
-                        <th class="p-2">Discount</th>
-                        <th class="p-2">Items</th>
-                    </thead>
-                    <tbody>
-                        <tr @click="showModal(s)" class="border hover:bg-gray-100 cursor-pointer active:bg-gray-200" v-for="s,i in today_sales" :key="i">
-                            <td class="p-2">{{ i + 1 }}.</td>
-                            <td class="p-2">{{ formatAmount(parseInt(s.total_amount) - parseInt(s.discount)) }}</td>
-                            <td class="p-2">{{ parseInt(s.discount) }}</td>
-                            <td class="p-2">
-                                <div class="flex gap-1">
-                                    <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white">{{it.count + " " + it.product_name }}</span>
-                                    <!-- <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white flex items-center gap-1">{{it.count + " "}}<img :src="it.icon" class="h-4 w-4"  alt=""></span> -->
-                                </div>
-                            </td>
-                        </tr>
-						<tr v-if="showTotal" class="border bg-slate-200">
-							<td></td>
-							<td class="font-bold p-2">{{ formatAmount(totalAmount) }}</td>
-							<td class="p-2">{{ totalDiscount }}</td>
-							<td class="p-2">TOTAL</td>
-						</tr>
-                        <tr></tr>
-                    </tbody>
-                </table>
-				<div v-if="today_sales.length > 1" class="flex mt-4 justify-start">
+				<div class="flex flex-col mb-8" v-for="ts,j in today_sales" :key="j" v-else>
+					<span class="font-bold text-xl text-blue-600">{{ ts.name }}</span>
+					<table class="w-full">
+						<thead class="bg-slate-200 text-left">
+							<th class="p-2">#</th>
+							<th class="p-2">Amount</th>
+							<th class="p-2">Discount</th>
+							<th class="p-2">Items</th>
+						</thead>
+						<tbody>
+							<tr @click="showModal(s)" class="border hover:bg-gray-100 cursor-pointer active:bg-gray-200" v-for="s,i in ts.sales" :key="i">
+								<td class="p-2">{{ i + 1 }}.</td>
+								<td class="p-2">{{ formatAmount(parseInt(s.total_amount) - parseInt(s.discount)) }}</td>
+								<td class="p-2">{{ parseInt(s.discount) }}</td>
+								<td class="p-2">
+									<div class="flex gap-1">
+										<span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white">{{it.count + " " + it.product_name }}</span>
+										<!-- <span v-for="it,k in getItems(s.products)" :key="k" class="text-sm rounded-md px-1 bg-green-500 text-white flex items-center gap-1">{{it.count + " "}}<img :src="it.icon" class="h-4 w-4"  alt=""></span> -->
+									</div>
+								</td>
+							</tr>
+							<tr class="border bg-slate-200">
+								<td></td>
+								<td class="font-bold p-2">{{ formatAmount(totalAmount(ts.sales)) }}</td>
+								<td class="p-2">{{ totalDiscount(ts.sales) }}</td>
+								<td class="p-2">TOTAL</td>
+							</tr>
+							<tr></tr>
+						</tbody>
+					</table>
+				</div>
+					
+				<!-- <div v-if="today_sales.length > 1" class="flex mt-4 justify-start">
 					<button @click="showTotal = true" v-if="!showTotal" :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"> Show Total </button>
 					<button @click="showTotal = false" v-else :href="route('transaction.create')" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md cursor-pointer hover:bg-yellow-600"> Hide Total </button>
-				</div>
+				</div> -->
             </div>
         </div>
             <!-- Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere animi aliquam blanditiis eius unde quis suscipit, assumenda nam officia dolor nihil odit ea explicabo repellat voluptates esse, quo laboriosam amet? -->
         </div>
-        <Modal :show="modalShow" :closeable="true">
+        <!-- <Modal :show="modalShow" :closeable="true">
             <div class="flex flex-col">
                 <div class="flex justify-between items-center h-10 bg-gray-100 px-4">
                     <h1 class="font-bold text-slate-700">Transaction Details</h1>
@@ -73,7 +77,7 @@ import { ref, onMounted } from 'vue';
                 </div>
                 <TransactionDetails :transaction="transaction" />
             </div>
-        </Modal>
+        </Modal> -->
     </AdminLayout>
 </template>
 
@@ -121,24 +125,23 @@ export default {
                 maximumFractionDigits: 0
             })
             return formatter.format(number)
-        }
-    },
-	computed: {
-		totalAmount () {
+        },
+		totalAmount (sales) {
 			let total = 0
-			this.today_sales.forEach((sale) => {
+			sales.forEach((sale) => {
 				total += parseInt(sale.total_amount - sale.discount)
 			})
 			return total
 		},
-        totalDiscount () {
+		totalDiscount (sales) {
 			let total = 0
-			this.today_sales.forEach((sale) => {
+			sales.forEach((sale) => {
 				total += parseInt(sale.discount)
 			})
             return total
 		},
-	},
+    },
+
     mounted () {
         console.log(this.today_sales)
     }

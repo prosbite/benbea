@@ -14,8 +14,12 @@ class Transaction extends Model
         return self::whereDate('created_at', $today)->where('user_id', $userId)->with('products')->get();
     }
 
-    public function salesByDate ($userId, $date) {
-        return self::whereDate('created_at', $date)->where('user_id', $userId)->with('products')->get();
+    public function salesByDate ($date) {
+		$users = User::all();
+		foreach ($users as $key => $value) {
+			$users[$key]->sales = self::whereDate('created_at', $date)->where('user_id', $value->id)->with('products')->get();
+		}
+		return $users;
     }
 
     public function products()

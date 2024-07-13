@@ -16,7 +16,7 @@ class DashboardControllerAdmin extends Controller
         return Inertia::render('admin/Dashboard',[
             "user" => Auth::user(),
             "today" => (new Today())->today(Auth::user()->id),
-            "today_sales" => (new Transaction())->salesByDate(1, $date)
+            "today_sales" => (new Transaction())->salesByDate($date)
         ]);
     }
 }
