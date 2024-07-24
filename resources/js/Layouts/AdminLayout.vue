@@ -22,7 +22,7 @@ onMounted(() => {
 
             <!-- Navigation  -->
             <div class="flex flex-col gap-1 w-full pt-12">
-                <div class="flex gap-3 items-center h-10 text-slate-200 w-full pl-6 hover:text-blue-500">
+                <div class="flex gap-3 items-center h-10 text-slate-200 w-full pl-6 hover:text-blue-500":class="route().current()==='admin.dashboard'?'bg-gray-800':''">
                     <i class="fa fa-dashboard"></i>
                     <Link :href="route('admin.dashboard')">Dashboard</Link>
                 </div>
@@ -33,12 +33,12 @@ onMounted(() => {
             </div>
         </div>
 
-        <div class="md:hidden fixed left-0 top-0 flex flex-col items-center w-64 bg-gray-900 min-h-screen ml-[-256px] md:ml-0 transition-all" :style="showSidebar?'margin-left:-256px!important':'margin-left:0px!important'">
+        <div class="md:hidden fixed left-0 top-0 flex flex-col items-center w-64 bg-gray-900 min-h-screen ml-[-256px] md:ml-0 transition-all" :style="showSidebar?'margin-left:0px!important':'margin-left:-256px!important'">
             <div class="flex w-full items-center justify-between border-b border-black px-6">
-                <div class="flex items-center h-14 w-full justify-start">
+                <Link :href="route('dashboard')" class="flex items-center h-14 w-full justify-start">
                     <span class="font-bold text-blue-500 text-2xl">BEN&amp;</span>
                     <span class="font-bold text-pink-500 text-2xl">BEA</span>
-                </div>
+                </Link>
                 <i @click="showSidebar = !showSidebar" class="fa fa-bars text-blue-200 text-2xl cursor-pointer text-right"></i>
             </div>
 

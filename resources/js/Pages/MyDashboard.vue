@@ -101,7 +101,9 @@ const handleSubmit = () => {
 							<td class="p-2">{{ totalDiscount }}</td>
 							<td class="p-2">TOTAL</td>
 						</tr>
-                        <tr></tr>
+                        <tr>
+                            <td colspan="4" class="text-right">this is it</td>
+                        </tr>
                     </tbody>
                 </table>
 				<div v-if="today_sales.length > 1" class="flex mt-4 justify-start">
