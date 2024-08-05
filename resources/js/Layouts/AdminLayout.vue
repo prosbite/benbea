@@ -4,10 +4,8 @@ import { Link } from '@inertiajs/vue3';
 import NavLink from '@/Components/NavLink.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 
-const showSidebar = ref(false)
-onMounted(() => {
-    console.log(route().current())
-})
+const showSidebar = ref(true)
+
 </script>
 
 <template>
@@ -15,16 +13,20 @@ onMounted(() => {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
          <!-- sidebar -->
         <div class="hidden md:flex flex-col items-center relative w-64 bg-gray-900 ml-[-256px] md:ml-0 transition-all" :style="showSidebar?'margin-left:-256px!important':'margin-left:0px!important'">
-            <div class="flex items-center border-b border-black h-14 w-full justify-center">
+            <a :href="route('dashboard')" class="flex items-center border-b border-black h-14 w-full justify-center">
                 <span class="font-bold text-blue-500 text-2xl">BEN&amp;</span>
                 <span class="font-bold text-pink-500 text-2xl">BEA</span>
-            </div>
+            </a>
 
             <!-- Navigation  -->
             <div class="flex flex-col gap-1 w-full pt-12">
                 <div class="flex gap-3 items-center h-10 text-slate-200 w-full pl-6 hover:text-blue-500">
                     <i class="fa fa-dashboard"></i>
                     <Link :href="route('admin.dashboard')">Dashboard</Link>
+                </div>
+				<div class="flex gap-3 items-center h-10 text-slate-200 w-full pl-6 hover:text-blue-500">
+                    <i class="fa fa-tag"></i>
+                    <Link :href="route('products.index')">Products</Link>
                 </div>
                 <div class="flex gap-3 items-center h-10 text-slate-200 w-full pl-6 hover:text-blue-500">
                     <i class="fa fa-gear"></i>

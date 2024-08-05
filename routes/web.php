@@ -6,6 +6,7 @@ use App\Http\Controllers\TodaysController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\DashboardControllerAdmin;
+use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Models\Transaction;
@@ -47,5 +48,7 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::post('/transaction/store', [TransactionsController::class, 'store'])->name('transaction.store');
 });
+
+Route::resource('products', ProductController::class);
 
 require __DIR__.'/auth.php';
