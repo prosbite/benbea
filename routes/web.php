@@ -6,6 +6,7 @@ use App\Http\Controllers\TodaysController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\DashboardControllerAdmin;
+use App\Http\Controllers\PriceProductController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/transaction/store', [TransactionsController::class, 'store'])->name('transaction.store');
+    Route::delete('/products/{product}/prices/{price}', [PriceProductController::class, 'destroy'])->name('priceProduct.destroy');
 });
 
 Route::resource('products', ProductController::class);

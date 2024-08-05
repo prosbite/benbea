@@ -41,9 +41,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-		$product = $product->with('prices')->where('id', $product->id)->first();
         return Inertia::render('products/show', [
-			'product' => $product,
+			'product' => $product->load('prices'),
 			'user' => Auth::user()
 		]);
     }
@@ -67,8 +66,9 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        return $product;
     }
 }
