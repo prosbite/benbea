@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Price;
 use App\Models\Product;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -15,7 +16,6 @@ class ProductController extends Controller
     public function index()
     {
         return Inertia::render('products/index', [
-			"user" => Auth::user(),
 			"products" => Product::all()
 		]);
     }
@@ -42,7 +42,12 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return Inertia::render('products/show', [
-			'product' => $product->load('prices'),
+			'product' => Product::with(['prices' => function ($query) {
+                $query->orderBy('price', 'asc');
+            }])->find($product->id),
+
+            'prices' => Price::query()->orderBy('price', 'ASC')->get(),
+
 			'user' => Auth::user()
 		]);
     }

@@ -14,7 +14,6 @@ class DashboardControllerAdmin extends Controller
     public function index (Request $request) {
         $date = $request->date? $request->date : Carbon::today();
         return Inertia::render('admin/Dashboard',[
-            "user" => Auth::user(),
             "today" => (new Today())->today(Auth::user()->id),
             "today_sales" => (new Transaction())->salesByDate($date)
         ]);

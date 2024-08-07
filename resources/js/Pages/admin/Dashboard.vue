@@ -60,7 +60,7 @@ import { ref, onMounted } from 'vue';
 						</tbody>
 					</table>
 				</div>
-					
+
 				<!-- <div v-if="today_sales.length > 1" class="flex mt-4 justify-start">
 					<button @click="showTotal = true" v-if="!showTotal" :href="route('transaction.create')" class="px-3 py-1 bg-green-500 text-white text-sm rounded-md cursor-pointer hover:bg-green-600"> Show Total </button>
 					<button @click="showTotal = false" v-else :href="route('transaction.create')" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md cursor-pointer hover:bg-yellow-600"> Hide Total </button>

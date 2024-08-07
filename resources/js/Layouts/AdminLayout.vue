@@ -61,7 +61,7 @@ const showSidebar = ref(true)
             <div class="flex justify-between w-full h-14 border-b bg-white items-center px-8">
                 <i @click="showSidebar = !showSidebar" class="fa fa-bars text-2xl cursor-pointer text-gray-500 hover:text-gray-600 active:text-gray-700"></i>
                 <div class="flex items-center gap-4">
-                    <span>Hi, <span class="font-bold text-blue-500"> {{ $page.props.user.name }} </span></span>
+                    <span>Hi, <span class="font-bold text-blue-500"> {{ $page.props.auth.user.name }} </span></span>
                     <i class="fa fa-right-from-bracket text-2xl font-bold text-gray-700 hover:text-gray-800 active:text-gray-900 cursor-pointer"></i>
                 </div>
             </div>

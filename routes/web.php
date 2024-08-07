@@ -6,6 +6,7 @@ use App\Http\Controllers\TodaysController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\DashboardControllerAdmin;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PriceProductController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
@@ -49,8 +50,13 @@ Route::middleware('auth', 'verified')->group(function () {
 
     Route::post('/transaction/store', [TransactionsController::class, 'store'])->name('transaction.store');
     Route::delete('/products/{product}/prices/{price}', [PriceProductController::class, 'destroy'])->name('priceProduct.destroy');
+    Route::post('/products/{product}/prices/{price}', [PriceProductController::class, 'store'])->name('priceProduct.store');
+
+    Route::post('/price/store', [PriceController::class, 'store'])->name('price.store');
+    Route::delete('/price/{price}', [PriceController::class, 'destroy'])->name('price.destroy');
+
+    Route::resource('products', ProductController::class);
 });
 
-Route::resource('products', ProductController::class);
 
 require __DIR__.'/auth.php';

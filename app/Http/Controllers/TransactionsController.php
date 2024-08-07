@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -15,9 +16,12 @@ class TransactionsController extends Controller
     }
 
     public function create () {
+        $products = Product::with(['prices' => function ($query) {
+            $query->orderBy('price', 'asc');
+        }])->get();
+
         return Inertia::render('TransactionCreate',[
-            "user" => Auth::user(),
-            "products" => \App\Models\Product::with('prices')->get()
+            "products" => $products
         ]);
     }
 

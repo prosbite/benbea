@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Price extends Model
 {
     use HasFactory;
+    protected $fillable = ['price'];
 
 	public function products (): BelongsToMany {
 		return $this->belongsToMany(Product::class);

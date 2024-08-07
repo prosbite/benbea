@@ -11,4 +11,9 @@ class PriceProductController extends Controller
     public function destroy (Product $product, Price $price) {
         $product->prices()->detach($price);
     }
+
+    public function store (Product $product, Price $price) {
+        // dd($product);
+        $product->prices()->attach($price);
+    }
 }
